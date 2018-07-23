@@ -45,6 +45,24 @@ class HBNBCommand(cmd.Cmd):
         try:
             args = shlex.split(args)
             new_instance = eval(args[0])()
+            for arg in args[1:]:
+                try:
+                    key = arg.split("=")[0]
+                    value = arg.split("=")[1]
+                    if value[0] == '"':
+                        value = value.replace("_", " ")
+                        value = value[1:-1]
+                    try:
+                        float(value)
+                    except:
+                        pass
+                    try:
+                        int(value)
+                    except:
+                        pass
+                    setattr(new_instance, key, value)
+                except:
+                    continue
             new_instance.save()
             print(new_instance.id)
 
