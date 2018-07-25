@@ -5,15 +5,16 @@
 import cmd
 import json
 import shlex
-from models.engine.file_storage import FileStorage
+import os
+from models.place import Place
 from models.base_model import BaseModel
 from models.user import User
-from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-
+from models.engine.file_storage import FileStorage
+import models
 
 class HBNBCommand(cmd.Cmd):
     '''
@@ -54,19 +55,19 @@ class HBNBCommand(cmd.Cmd):
                         value = value[1:-1]
                     try:
                         float(value)
-                    except:
+                    except ValueError:
                         pass
                     try:
                         int(value)
-                    except:
+                    except ValueError:
                         pass
                     setattr(new_instance, key, value)
-                except:
+                except ValueError:
                     continue
             new_instance.save()
             print(new_instance.id)
 
-        except:
+        except NameError:
             print("** class doesn't exist **")
 
     def do_show(self, args):
@@ -231,7 +232,7 @@ class HBNBCommand(cmd.Cmd):
             cmd_arg = args[0] + " " + args[2]
             func = functions[args[1]]
             func(cmd_arg)
-        except:
+        except NameError:
             print("*** Unknown syntax:", args[0])
 
 
