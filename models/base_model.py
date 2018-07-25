@@ -40,7 +40,7 @@ class BaseModel:
             else:
                 self.updated_at = datetime.now()
             if not self.id:
-                self.id = str(uuid.uuids4())
+                self.id = str(uuid.uuid4())
             for key, val in kwargs.items():
                 if "__class__" not in key:
                     setattr(self, key, val)

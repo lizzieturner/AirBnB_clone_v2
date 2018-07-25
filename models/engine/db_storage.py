@@ -32,6 +32,7 @@ class DBStorage:
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}"
                                       .format(user, pswd, host, db),
                                       pool_pre_ping=True)
+        Base.metadata.create_all(self.__engine)
         if os.getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(bind=self.__engine)
 
@@ -46,7 +47,7 @@ class DBStorage:
                 obj_list[key] = obj
         else:
             for tbl in Base.__subclasses__():
-                obj = self.__session.query(tbl).all()
+                table  = self.__session.query(tbl).all()
                 for obj in table:
                     key = "{}.{}".format(obj.__class__.name, obj.id)
                     obj_list[key] = obj
@@ -56,8 +57,7 @@ class DBStorage:
         '''
             Adds new object to current database session
         '''
-        if obj:
-            self.__session.add(obj)
+        self.__session.add(obj)
 
     def save(self):
         '''

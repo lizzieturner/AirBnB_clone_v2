@@ -7,11 +7,11 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String, ForeignKey
 
 
-class State(BaseModel):
+class State(BaseModel, Base):
     '''
         Implementation for the State.
     '''
-    _tablename_ = 'states'
+    __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     city = relationship("City", backref="state", cascade="all, delete-orphan")
 
@@ -20,5 +20,4 @@ class State(BaseModel):
         '''
             Returns all cities in a State
         '''
-        city_list = models.storage.all("City").values()
-        return [city for city in city_list if city.state_id == self.id]
+        return [city for city in State.cities if city.state_id == self.id]
