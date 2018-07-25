@@ -11,6 +11,28 @@ import sys
 import datetime
 
 
+class TestDocsAndStyle(unittest.TestCase):
+    '''
+        Test documentation and formatting
+    '''
+    def test_class_doc(self):
+        '''
+            Check documentation
+        '''
+        self.assertTrue(len(BaseModel.__doc__) > 0)
+
+    def test_pep8(self):
+        '''
+           Test pep8 conformity
+        '''
+        style = pep8.StyleGuide(quiet=True)
+        file1 = 'models/base_model.py'
+        file2 = 'tests/test_models/test_base_model.py'
+        result = style.check_files([file1, file2])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warning).")
+
+
 class TestBase(unittest.TestCase):
     '''
         Testing the base class model.
@@ -18,16 +40,19 @@ class TestBase(unittest.TestCase):
 
     def setUp(self):
         '''
+            Initialize instance
+        '''
+        self.my_model = BaseModel
+        self.my_model.name = "Test Model"
+
+    @classmethod
+    def setUpClass(cls):
+        '''
             Initializing instance.
         '''
-        self.my_model = BaseModel()
-        self.my_model.name = "Binita Rai"
-
-    def TearDown(self):
-        '''
-            Removing instance.
-        '''
-        del self.my_model
+        cls.base1 = BaseModel
+        cls.base1.name = "Lizzie"
+        cls.base1.id = 5
 
     def test_id_type(self):
         '''
@@ -46,7 +71,7 @@ class TestBase(unittest.TestCase):
         '''
             Checks that an attribute can be added.
         '''
-        self.assertEqual("Binita Rai", self.my_model.name)
+        self.assertEqual("Test Model", self.my_model.name)
 
     def test_a_updated_created_equal(self):
         '''
@@ -55,14 +80,14 @@ class TestBase(unittest.TestCase):
         self.assertEqual(self.my_model.updated_at.year,
                          self.my_model.created_at.year)
 
+    @unittest.skipIf(os.getenv("HBNB_TYPE_STORAGE") == "db")
     def test_save(self):
         '''
             Checks that after updating the instance; the dates differ in the
             updated_at attribute.
         '''
-        old_update = self.my_model.updated_at
-        self.my_model.save()
-        self.assertNotEqual(self.my_model.updated_at, old_update)
+        self.base1.save()
+        self.assertNotEqual(self.base1.created_at, self.base1.updated_at)
 
     def test_str_overide(self):
         '''
@@ -80,13 +105,13 @@ class TestBase(unittest.TestCase):
         self.assertEqual(cap[1], "({})".format(inst_id))
         sys.stdout = backup
 
-    def test_to_dict_type(self):
+    def test_to_dict(self):
         '''
-            Checks that the to_dict method return type.
+            Checks the to_dict method
         '''
-
-        self.assertEqual("<class 'dict'>",
-                         str(type(self.my_model.to_dict())))
+        dict1 = self.base1.todict()
+        self.assertEqual("<class 'dict'>", str(type(dict1)))
+        self.assertIsInstance(dict1['created at'], str)
 
     def test_to_dict_class(self):
         '''
@@ -154,3 +179,10 @@ class TestBase(unittest.TestCase):
         my_model_dict = self.my_model.to_dict()
         new_model = BaseModel(my_model_dict)
         self.assertNotEqual(self.my_model, new_model)
+
+    @classmethod
+    def tearDownClass(cls):
+        '''
+            Remove instance
+        '''
+        del cls.base1
