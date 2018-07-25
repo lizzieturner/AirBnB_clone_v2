@@ -114,6 +114,15 @@ class test_console(unittest.TestCase):
         console.onecmd("create User")
         self.assertTrue(isinstance(self.capt_out.getvalue(), str))
 
+    def add_parameters(self):
+        '''
+            Test adding parameter to an instance
+        '''
+        console = self.create()
+        console.onecmd("create State name='California'")
+        console.onecmd("all")
+        self.assertEqual('California' in self.capt_out.getvalue(), True)
+
     def test_class_name(self):
         '''
             Testing the error messages for class name missing.
@@ -128,17 +137,6 @@ class test_console(unittest.TestCase):
             Testing the error messages for class name missing.
         '''
         console = self.create()
-        console.onecmd("create Binita")
+        console.onecmd("create NotState")
         x = (self.capt_out.getvalue())
         self.assertEqual("** class doesn't exist **\n", x)
-
-    '''
-    def test_destroy(self):
-        console = self.create()
-        self.assertTrue(console.onecmd("destroy"))
-
-    def test_update(self):
-        console = self.create()
-        self.assertTrue(console.onecmd("update"))
-
-    '''
