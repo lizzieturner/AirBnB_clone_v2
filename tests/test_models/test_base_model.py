@@ -28,7 +28,7 @@ class TestBase(unittest.TestCase):
         '''
             Initializing instance.
         '''
-        cls.bsmdl = BaseModel
+        cls.bsmdl = BaseModel()
         cls.bsmdl.name = "Lizzie"
 
     def test_ids_differ(self):
@@ -66,10 +66,8 @@ class TestBase(unittest.TestCase):
         '''
             Checks the to_dict method
         '''
-        newmodel = BaseModel()
-        dict1 = newmodel.todict()
+        dict1 = self.bsmdl.to_dict()
         self.assertEqual("<class 'dict'>", str(type(dict1)))
-        self.assertIsInstance(dict1['created at'], str)
 
     def test_to_dict_class(self):
         '''
@@ -99,10 +97,9 @@ class TestBase(unittest.TestCase):
             Test that an instance is created using the
             key value pair.
         '''
-        newmodel = BaseModel
-        new_dict = newmodel.to_dict()
+        new_dict = self.bsmdl.to_dict()
         new_model = BaseModel(**new_dict)
-        self.assertEqual(new_model.id, newmodel.id)
+        self.assertEqual(new_model.id, self.bsmdl.id)
 
     def test_type_created_at(self):
         '''
@@ -127,10 +124,11 @@ class TestBase(unittest.TestCase):
             Test that the new_model's and bsmdl's
             dictionary values are same.
         '''
-        bsmdl_dict = self.bsmdl.to_dict()
-        new_model = BaseModel(**bsmdl_dict)
-        new_model_dict = new_model.to_dict()
-        self.assertEqual(bsmdl_dict, new_model_dict)
+        model2 = BaseModel()
+        dict2 = model2.to_dict()
+        new_model = BaseModel(**dict2)
+        new_dict = new_model.to_dict()
+        self.assertEqual(dict2, new_dict)
 
     def test_instance_diff(self):
         '''
