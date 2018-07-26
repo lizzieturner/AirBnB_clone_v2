@@ -16,6 +16,7 @@ place_amenity = Table("place_amenity", Base.metadata,
                           "amenities.id"), primary_key=True,
                              nullable=False))
 
+
 class Place(BaseModel, Base):
     '''
         Define the class Place that inherits from BaseModel.
@@ -36,7 +37,6 @@ class Place(BaseModel, Base):
                            cascade="all, delete-orphan")
     amenities = relationship("Amenity ", secondary=place_amenity,
                              viewonly=False)
-
 
     if os.getenv("HBNB_TYPE_STORAGE") != "db":
         @property

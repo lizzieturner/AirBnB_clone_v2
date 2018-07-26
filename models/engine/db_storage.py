@@ -25,10 +25,10 @@ class DBStorage:
         '''
             Initializes DBStorage class
         '''
-        user=os.getenv("HBNB_MYSQL_USER")
-        pswd=os.getenv("HBNB_MYSQL_PWD")
-        host=os.getenv("HBNB_MYSQL_HOST")
-        db=os.getenv("HBNB_MYSQL_DB")
+        user = os.getenv("HBNB_MYSQL_USER")
+        pswd = os.getenv("HBNB_MYSQL_PWD")
+        host = os.getenv("HBNB_MYSQL_HOST")
+        db = os.getenv("HBNB_MYSQL_DB")
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}"
                                       .format(user, pswd, host, db),
                                       pool_pre_ping=True)
@@ -47,7 +47,7 @@ class DBStorage:
                 obj_list[key] = obj
         else:
             for tbl in Base.__subclasses__():
-                table  = self.__session.query(tbl).all()
+                table = self.__session.query(tbl).all()
                 for obj in table:
                     key = "{}.{}".format(obj.__class__.name, obj.id)
                     obj_list[key] = obj

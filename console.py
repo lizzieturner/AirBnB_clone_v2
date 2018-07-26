@@ -16,6 +16,7 @@ from models.review import Review
 from models.engine.file_storage import FileStorage
 import models
 
+
 class HBNBCommand(cmd.Cmd):
     '''
         Contains the entry point of the command interpreter.
