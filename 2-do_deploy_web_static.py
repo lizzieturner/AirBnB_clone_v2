@@ -15,7 +15,7 @@ def do_deploy(archive_path):
         return False
 
     file_name = os.path.basename(archive_path)
-    tmp_path = "/tmp/" + file_Name
+    tmp_path = "/tmp/" + file_name
     dest = "/data/web_static/releases/" + "os.path.splitext(file_name)"
     curr = "/data/web_static/current"
     try:
