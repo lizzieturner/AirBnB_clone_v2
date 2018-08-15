@@ -62,3 +62,9 @@ class FileStorage:
             check = obj.__class__.__name__ + "." + str(obj.id)
             del self.__objects[check]
             self.save
+
+    def close(self):
+        '''
+            Deserializes the JSON file to __objects using the reload method.
+        '''
+        self.reload()
